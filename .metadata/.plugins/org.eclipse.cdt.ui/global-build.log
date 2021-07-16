@@ -1,0 +1,4 @@
+14:30:30 **** Clean-only build of configuration Debug for project stm32f407xx ****
+make -j8 clean 
+rm -rf *
+ 
