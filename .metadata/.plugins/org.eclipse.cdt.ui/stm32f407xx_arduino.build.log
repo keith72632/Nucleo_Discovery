@@ -1,4 +1,4 @@
-14:29:48 **** Incremental Build of configuration Debug for project stm32f407xx_arduino ****
+13:32:23 **** Incremental Build of configuration Debug for project stm32f407xx_arduino ****
 make -j8 all 
 arm-none-eabi-size   stm32f407xx_arduino.elf 
    text	   data	    bss	    dec	    hex	filename
@@ -6,5 +6,5 @@ arm-none-eabi-size   stm32f407xx_arduino.elf
 Finished building: default.size.stdout
  
 
-14:29:49 Build Finished. 0 errors, 0 warnings. (took 471ms)
+13:32:23 Build Finished. 0 errors, 0 warnings. (took 522ms)
 

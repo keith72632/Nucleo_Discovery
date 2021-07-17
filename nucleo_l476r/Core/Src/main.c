@@ -17,27 +17,11 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
 #include <string.h>
 #include "main.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
@@ -55,19 +39,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART3_UART_Init(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -101,27 +74,21 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t str[32];
+//  uint8_t str[32];
 
-  strcpy((char*)str, "Nucleo Usart3 Enabled\n\r");
-  HAL_UART_Transmit(&huart3, str, strlen((char*)str), HAL_MAX_DELAY);
+//  strcpy((char*)str, "Nucleo Usart3 Enabled\n\r");
+//  HAL_UART_Transmit(&huart3, str, strlen((char*)str), HAL_MAX_DELAY);
+
+  uint8_t txBuffer[] = "Init\n\r";
 
   while (1)
   {
 	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
-    /* USER CODE END WHILE */
+
+	  HAL_SPI_Transmit(&hspi1, txBuffer, strlen((char *)txBuffer), HAL_MAX_DELAY);
+
 	  HAL_Delay(500);
 
-
-	  uint8_t spi_msg[] = "hello";
-	  //pull pin low
-	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-	  //transmit
-	  HAL_SPI_Transmit(&hspi1, spi_msg, strlen((char *)spi_msg), 100);
-	  //pull pin high
-	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
-
-    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -198,13 +165,12 @@ static void MX_SPI1_Init(void)
   /* USER CODE END SPI1_Init 1 */
   /* SPI1 parameter configuration*/
   hspi1.Instance = SPI1;
-  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Mode = SPI_MODE_SLAVE;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
+  hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi1.Init.NSS = SPI_NSS_HARD_INPUT;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

@@ -18,7 +18,11 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <string.h>
+#include <stdint.h>
+#include <stdio.h>
 #include "main.h"
+#include "mem.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -101,22 +105,30 @@ int main(void)
   HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
   while (1)
   {
-	  uint8_t txBuffer[10] = "hey\n";
-	  uint8_t rxBuffer[10] = "0";
-	  uint8_t uartBuffer[] = "hey\n";
+//	  uint8_t txBuffer[32] = "hey\n";
+	  uint8_t rxBuffer[6];
+//	  uint8_t uartBuffer[32];
+
+
 
 	  //pull pin low
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 
 	  //receive data
-	  HAL_SPI_TransmitReceive(&hspi1, txBuffer, rxBuffer, 10, HAL_MAX_DELAY);
+	  HAL_SPI_Receive(&hspi1, rxBuffer, strlen((char*)rxBuffer), HAL_MAX_DELAY);
 
 	  //pull pin high
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 
+//	  mem_clear(uartBuffer, strlen((char*)uartBuffer));
+
+//	  sprintf((char*)uartBuffer, (char*)rxBuffer, "\n\r");
+
+	  HAL_UART_Transmit(&huart2, rxBuffer, strlen((char*)rxBuffer), HAL_MAX_DELAY);
+
+
 	  HAL_Delay(50);
 
-	  HAL_UART_Transmit(&huart2, uartBuffer, 10, HAL_MAX_DELAY);
 
 	  HAL_Delay(1000);
   }
