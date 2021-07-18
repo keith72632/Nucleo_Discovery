@@ -102,13 +102,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
   while (1)
   {
 //	  uint8_t txBuffer[32] = "hey\n";
 	  uint8_t rxBuffer[6];
 //	  uint8_t uartBuffer[32];
+//	  uint8_t test[] = "test\n\r";
 
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+
+//	  HAL_UART_Transmit(&huart2, test, 6, HAL_MAX_DELAY);
 
 
 	  //pull pin low
@@ -124,13 +127,13 @@ int main(void)
 
 //	  sprintf((char*)uartBuffer, (char*)rxBuffer, "\n\r");
 
-	  HAL_UART_Transmit(&huart2, rxBuffer, strlen((char*)rxBuffer), HAL_MAX_DELAY);
+	  HAL_UART_Transmit(&huart2, rxBuffer, 6, HAL_MAX_DELAY);
 
 
 	  HAL_Delay(50);
 
 
-	  HAL_Delay(1000);
+//	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }

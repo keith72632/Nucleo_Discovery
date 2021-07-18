@@ -80,14 +80,15 @@ int main(void)
 //  HAL_UART_Transmit(&huart3, str, strlen((char*)str), HAL_MAX_DELAY);
 
   uint8_t txBuffer[] = "Init\n\r";
+  uint8_t rxBuffer[6];
 
   while (1)
   {
 	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
 
-	  HAL_SPI_Transmit(&hspi1, txBuffer, strlen((char *)txBuffer), HAL_MAX_DELAY);
+	  HAL_SPI_TransmitReceive(&hspi1, txBuffer, rxBuffer, strlen((char *)txBuffer), HAL_MAX_DELAY);
 
-	  HAL_Delay(500);
+	  HAL_Delay(10);
 
   }
   /* USER CODE END 3 */

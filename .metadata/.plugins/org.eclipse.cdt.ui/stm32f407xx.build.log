@@ -1,7 +1,7 @@
-14:41:38 **** Clean-only build of configuration Debug for project stm32f407xx ****
+10:57:20 **** Clean-only build of configuration Debug for project stm32f407xx ****
 make -j8 clean 
 rm -rf *
  
 
-14:41:39 Build Finished. 0 errors, 0 warnings. (took 473ms)
+10:57:20 Build Finished. 0 errors, 0 warnings. (took 476ms)
 
