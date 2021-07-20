@@ -1,7 +1,7 @@
-10:57:26 **** Clean-only build of configuration Debug for project nucleo_l476r ****
+07:16:50 **** Clean-only build of configuration Debug for project nucleo_l476r ****
 make -j8 clean 
 rm -rf *
  
 
-10:57:26 Build Finished. 0 errors, 0 warnings. (took 477ms)
+07:16:51 Build Finished. 0 errors, 0 warnings. (took 474ms)
 

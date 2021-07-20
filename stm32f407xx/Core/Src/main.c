@@ -19,124 +19,67 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
-#include <stdint.h>
-#include <stdio.h>
 #include "main.h"
-#include "mem.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart2;
 
-/* USER CODE BEGIN PV */
 
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+	uint8_t rxBuffer[6];
+//	uint8_t txBuffer[] = "discovery";
+	HAL_Init();
 
-  /* USER CODE END 1 */
+	SystemClock_Config();
 
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_SPI1_Init();
-  MX_USART2_UART_Init();
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-//	  uint8_t txBuffer[32] = "hey\n";
-	  uint8_t rxBuffer[6];
-//	  uint8_t uartBuffer[32];
-//	  uint8_t test[] = "test\n\r";
-
-	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-
-//	  HAL_UART_Transmit(&huart2, test, 6, HAL_MAX_DELAY);
+	MX_GPIO_Init();
+	MX_SPI1_Init();
+	MX_USART2_UART_Init();
 
 
-	  //pull pin low
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+	while (1)
+	{
+		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 
-	  //receive data
-	  HAL_SPI_Receive(&hspi1, rxBuffer, strlen((char*)rxBuffer), HAL_MAX_DELAY);
+		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, RESET);
 
-	  //pull pin high
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+		  HAL_SPI_Receive_IT(&hspi1, rxBuffer, 10);
 
-//	  mem_clear(uartBuffer, strlen((char*)uartBuffer));
+		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, SET);
 
-//	  sprintf((char*)uartBuffer, (char*)rxBuffer, "\n\r");
+		  HAL_UART_Transmit(&huart2, rxBuffer, 6, HAL_MAX_DELAY);
 
-	  HAL_UART_Transmit(&huart2, rxBuffer, 6, HAL_MAX_DELAY);
+		  HAL_Delay(1000);
 
-
-	  HAL_Delay(50);
-
-
-//	  HAL_Delay(1000);
   }
-  /* USER CODE END 3 */
+
 }
+
+/**
+  * @brief This function handles SPI1 global interrupt.
+  */
+void SPI1_IRQHandler(void)
+{
+  /* USER CODE BEGIN SPI1_IRQn 0 */
+	uint8_t buffer[] = "SPIHandler Finished\n\r";
+
+  /* USER CODE END SPI1_IRQn 0 */
+	HAL_SPI_IRQHandler(&hspi1);
+  /* USER CODE BEGIN SPI1_IRQn 1 */
+	HAL_UART_Transmit(&huart2, buffer, strlen((char *)buffer), HAL_MAX_DELAY);
+
+  /* USER CODE END SPI1_IRQn 1 */
+}
+
 
 /**
   * @brief System Clock Configuration
@@ -199,7 +142,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
   hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
@@ -261,12 +204,16 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PE3 */
   GPIO_InitStruct.Pin = GPIO_PIN_3;
@@ -281,6 +228,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PE0 */
   GPIO_InitStruct.Pin = GPIO_PIN_0;

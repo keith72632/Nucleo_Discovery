@@ -56,7 +56,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern SPI_HandleTypeDef hspi1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -212,6 +212,7 @@ void EXTI0_IRQHandler(void)
 
   /* USER CODE END EXTI0_IRQn 1 */
 }
+
 
 /* USER CODE BEGIN 1 */
 
