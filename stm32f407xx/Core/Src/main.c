@@ -35,8 +35,8 @@ static void MX_USART2_UART_Init(void);
 
 int main(void)
 {
-	uint8_t rxBuffer[6];
-//	uint8_t txBuffer[] = "discovery";
+//	uint8_t rxBuffer[6];
+	uint8_t txBuffer[] = "discovery";
 	HAL_Init();
 
 	SystemClock_Config();
@@ -52,11 +52,11 @@ int main(void)
 
 		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, RESET);
 
-		  HAL_SPI_Receive_IT(&hspi1, rxBuffer, 10);
+		  HAL_SPI_Transmit(&hspi1, txBuffer, strlen((char *)txBuffer), HAL_MAX_DELAY);
 
 		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, SET);
 
-		  HAL_UART_Transmit(&huart2, rxBuffer, 6, HAL_MAX_DELAY);
+//		  HAL_UART_Transmit(&huart2, rxBuffer, 6, HAL_MAX_DELAY);
 
 		  HAL_Delay(1000);
 
@@ -76,6 +76,8 @@ void SPI1_IRQHandler(void)
 	HAL_SPI_IRQHandler(&hspi1);
   /* USER CODE BEGIN SPI1_IRQn 1 */
 	HAL_UART_Transmit(&huart2, buffer, strlen((char *)buffer), HAL_MAX_DELAY);
+
+	SPI1->CR2 &= ~(1 << 6);
 
   /* USER CODE END SPI1_IRQn 1 */
 }

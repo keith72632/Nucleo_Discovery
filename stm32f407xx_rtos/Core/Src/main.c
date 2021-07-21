@@ -346,20 +346,22 @@ static void MX_GPIO_Init(void)
 void StartTaskOneSPI1(void *argument)
 {
   /* USER CODE BEGIN 5 */
-	uint8_t rxBuffer[6];
+	uint8_t txBuffer[] = "hello\n";
+//	uint8_t rxBuffer[6];
 
   /* Infinite loop */
   for(;;)
   {
-	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, RESET);
 
-	  HAL_SPI_Receive_IT(&hspi1, rxBuffer, 10);
+	  HAL_SPI_Transmit(&hspi1, txBuffer, strlen((char*)txBuffer), HAL_MAX_DELAY);
 
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, SET);
 
-	  HAL_UART_Transmit(&huart2, rxBuffer, 6, HAL_MAX_DELAY);
+	  osDelay(100);
+
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+
 
 //	  HAL_Delay(1000);
 
@@ -375,12 +377,12 @@ void StartTaskOneSPI1(void *argument)
 void SPI1_IRQHandler(void)
 {
   /* USER CODE BEGIN SPI1_IRQn 0 */
-	uint8_t buffer[] = "SPIHandler Finished\n\r";
+//	uint8_t buffer[] = "SPIHandler Finished\n\r";
 
   /* USER CODE END SPI1_IRQn 0 */
 	HAL_SPI_IRQHandler(&hspi1);
   /* USER CODE BEGIN SPI1_IRQn 1 */
-	HAL_UART_Transmit(&huart2, buffer, strlen((char *)buffer), HAL_MAX_DELAY);
+//	HAL_UART_Transmit(&huart2, buffer, strlen((char *)buffer), HAL_MAX_DELAY);
 
   /* USER CODE END SPI1_IRQn 1 */
 }

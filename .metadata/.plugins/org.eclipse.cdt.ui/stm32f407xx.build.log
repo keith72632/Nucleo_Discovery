@@ -1,7 +1,10 @@
-07:16:44 **** Clean-only build of configuration Debug for project stm32f407xx ****
-make -j8 clean 
-rm -rf *
+16:49:43 **** Incremental Build of configuration Debug for project stm32f407xx ****
+make -j8 all 
+arm-none-eabi-size   stm32f407xx.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10436	     20	   1724	  12180	   2f94	stm32f407xx.elf
+Finished building: default.size.stdout
  
 
-07:16:45 Build Finished. 0 errors, 0 warnings. (took 476ms)
+16:49:43 Build Finished. 0 errors, 0 warnings. (took 573ms)
 

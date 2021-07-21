@@ -1,4 +1,45 @@
-07:16:50 **** Clean-only build of configuration Debug for project nucleo_l476r ****
-make -j8 clean 
-rm -rf *
+16:49:30 **** Incremental Build of configuration Debug for project nucleo_l476r ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "nucleo_l476r.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/keith/Documents/CubeMX/nucleo-discovery/nucleo_l476r/STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="nucleo_l476r.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: nucleo_l476r.elf
+ 
+arm-none-eabi-objdump -h -S  nucleo_l476r.elf  > "nucleo_l476r.list"
+arm-none-eabi-objcopy  -O binary  nucleo_l476r.elf  "nucleo_l476r.bin"
+arm-none-eabi-size   nucleo_l476r.elf 
+   text	   data	    bss	    dec	    hex	filename
+  15828	     20	   1932	  17780	   4574	nucleo_l476r.elf
+Finished building: default.size.stdout
+ 
+Finished building: nucleo_l476r.bin
+ 
+Finished building: nucleo_l476r.list
+ 
+16:49:43 **** Incremental Build of configuration Debug for project stm32f407xx ****
+make -j8 all 
+arm-none-eabi-size   stm32f407xx.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10436	     20	   1724	  12180	   2f94	stm32f407xx.elf
+Finished building: default.size.stdout
+ 
+16:50:21 **** Incremental Build of configuration Debug for project nucleo_l476r ****
+make -j8 all 
+arm-none-eabi-size   nucleo_l476r.elf 
+   text	   data	    bss	    dec	    hex	filename
+  15828	     20	   1932	  17780	   4574	nucleo_l476r.elf
+Finished building: default.size.stdout
+ 
+16:51:05 **** Incremental Build of configuration Debug for project nucleo_l476r ****
+make -j8 all 
+arm-none-eabi-size   nucleo_l476r.elf 
+   text	   data	    bss	    dec	    hex	filename
+  15828	     20	   1932	  17780	   4574	nucleo_l476r.elf
+Finished building: default.size.stdout
+ 
+16:54:59 **** Incremental Build of configuration Debug for project nucleo_l476r ****
+make -j8 all 
+arm-none-eabi-size   nucleo_l476r.elf 
+   text	   data	    bss	    dec	    hex	filename
+  15828	     20	   1932	  17780	   4574	nucleo_l476r.elf
+Finished building: default.size.stdout
  

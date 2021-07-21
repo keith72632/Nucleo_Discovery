@@ -85,7 +85,7 @@ int main(void)
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  SystemClock_Config();
+   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
@@ -97,17 +97,22 @@ int main(void)
   MX_SPI1_Init();
   MX_USART3_UART_Init();
 
-  uint8_t txBuffer[] = "In\n\r";
-//  uint8_t rxBuffer[6];
-//  uint8_t txCode = 0x50;
+//  uint8_t txBuffer[] = "H\n\r";
+  uint8_t rxBuffer[10];
+  uint8_t txCode[] = "uart";
+  HAL_UART_Transmit(&huart3, txCode, strlen((char *)txCode), HAL_MAX_DELAY);
 
   while (1)
   {
 	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
 
-	  HAL_SPI_Transmit(&hspi1, txBuffer, strlen((char *)txBuffer), HAL_MAX_DELAY);
+	  HAL_SPI_Receive(&hspi1, rxBuffer, 10, HAL_MAX_DELAY);
 
 	  HAL_Delay(10);
+
+	  HAL_UART_Transmit(&huart3, rxBuffer, strlen((char *)rxBuffer), HAL_MAX_DELAY);
+
+	  HAL_Delay(100);
 
   }
 }
